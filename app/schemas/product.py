@@ -22,6 +22,7 @@ class ProductBase(BaseModel):
 class ProductCreate(ProductBase):
     """Schema for creating a new product."""
     class Config:
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "name": "Product name",
@@ -77,6 +78,10 @@ class ProductResponse(ProductBase):
         }
 
 
+def decimal_to_float(value: Decimal) -> float:
+    return float(value)
+
+
 class ProductListResponse(BaseModel):
     """Schema for list of products (limited fields)."""
     id: int = Field(..., description="Unique product identifier")
@@ -95,3 +100,4 @@ class ProductListResponse(BaseModel):
                 "category": "T-Shirts"
             },
         }
+        json_encoders = {Decimal: decimal_to_float}
